@@ -81,6 +81,7 @@ class ApplicantSignUpForm(forms.ModelForm):
 class CompanySignUpForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
+    company_name = forms.CharField(label='Company Name')
 
     class Meta:
         model = User
@@ -107,7 +108,8 @@ class CompanySignUpForm(forms.ModelForm):
         user.set_password(self.cleaned_data["password1"])
         user.is_employer = True
         user.save()
-        company = Company.objects.create(user=user)
+        company_name = self.cleaned_data.get('company_name')
+        company = Company.objects.create(user=user, name=company_name)
         return user
 
 class LoginForm(AuthenticationForm):

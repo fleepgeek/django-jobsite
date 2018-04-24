@@ -28,7 +28,7 @@ urlpatterns = [
     path('applicant/home/', ApplicantHome.as_view(), name='applicant-home'),
     path('signup/applicant/', ApplicantSignUp.as_view(extra_context={'title': 'Applicant SignUp'}), name='applicant-signup'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('login/', LoginView.as_view(extra_context={'title': 'Login'}), name='login'),
+    path('login/', LoginView.as_view(), name='login'),
     path('', HomePage.as_view(), name='home'),
     path('admin/', admin.site.urls),
 ]

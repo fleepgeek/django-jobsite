@@ -58,16 +58,25 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.email = self.__class__.objects.normalize_email(self.email)
 
 
+YEARS_OF_EXP = (
+    ('entry', 'Entry Level'),
+    ('1-2', '1-2 years'),
+    ('3-5', '3-5 years'),
+    ('6-10', '6-10 years'),
+    ('above 10', 'Above 10 years')
+)
+
 class Applicant(models.Model):
     user            = models.OneToOneField(User, on_delete=models.CASCADE)
     date_of_birth   = models.DateField(null=True, blank=True)
     location        = models.CharField(_('Where do you Reside now'), max_length=20, null=True, blank=True)
     gender          = models.CharField(max_length=1, null=True, blank=True)
     about           = models.TextField(blank=True, null=True)
-    years_of_exp    = models.PositiveIntegerField(_('Years of Experience'), null=True, blank=True)
-
+    years_of_exp        = models.CharField('Years of Experience', max_length=20, choices=YEARS_OF_EXP, null=True, blank=True)
+    
     def __str__(self):
-        return self.user
+        return self.user.full_name
+
 
 
 class Company(models.Model):
@@ -79,5 +88,8 @@ class Company(models.Model):
     state       = models.CharField(max_length=40, null=True, blank=True)
     address     = models.CharField(_('company address'), max_length=120, null=True, blank=True)
 
-    def __str__(self):
-        return self.name
+    class Meta:
+        verbose_name_plural = 'Companies'
+    
+    # def __str__(self):
+    #     return self.name
