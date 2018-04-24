@@ -33,11 +33,13 @@ class UserManager(BaseUserManager):
         
 
 class User(AbstractBaseUser, PermissionsMixin):
-    full_name   = models.CharField(_('full name'), max_length=30)
-    email       = models.EmailField(_('email address'), unique=True)
-    is_staff    = models.BooleanField(_('staff status'), default=False)
-    is_active   = models.BooleanField(_('active'), default=True)
-    date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
+    full_name       = models.CharField(_('full name'), max_length=30)
+    email           = models.EmailField(_('email address'), unique=True)
+    is_staff        = models.BooleanField(_('staff status'), default=False)
+    is_active       = models.BooleanField(_('active'), default=True)
+    date_joined     = models.DateTimeField(_('date joined'), auto_now_add=True)
+    is_applicant    = models.BooleanField(_('applicant'), default=False)
+    is_employer     = models.BooleanField(_('employer'), default=False)
 
     objects = UserManager()
 
@@ -58,23 +60,24 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Applicant(models.Model):
     user            = models.OneToOneField(User, on_delete=models.CASCADE)
-    date_of_birth   = models.DateField()
-    location        = models.CharField(_('Where do you Reside now'), max_length=20)
-    gender          = models.CharField(max_length=1)
+    date_of_birth   = models.DateField(null=True, blank=True)
+    location        = models.CharField(_('Where do you Reside now'), max_length=20, null=True, blank=True)
+    gender          = models.CharField(max_length=1, null=True, blank=True)
     about           = models.TextField(blank=True, null=True)
-    years_of_exp    = models.PositiveIntegerField(_('Years of Experience'))
+    years_of_exp    = models.PositiveIntegerField(_('Years of Experience'), null=True, blank=True)
 
     def __str__(self):
         return self.user
 
 
 class Company(models.Model):
-    name   = models.CharField(_('company name'), max_length=50)
-    description = models.TextField(_('describe your company'))
-    website     = models.URLField(_('company webite'))
-    country     = models.CharField(max_length=40)
-    state       = models.CharField(max_length=40)
-    address     = models.CharField(_('company address'), max_length=120)
+    user        = models.OneToOneField(User, on_delete=models.CASCADE)
+    name        = models.CharField(_('company name'), max_length=50, null=True, blank=True)
+    description = models.TextField(_('describe your company'), null=True, blank=True)
+    website     = models.URLField(_('company webite'), null=True, blank=True)
+    country     = models.CharField(max_length=40, null=True, blank=True)
+    state       = models.CharField(max_length=40, null=True, blank=True)
+    address     = models.CharField(_('company address'), max_length=120, null=True, blank=True)
 
     def __str__(self):
         return self.name
