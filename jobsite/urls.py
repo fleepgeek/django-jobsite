@@ -15,9 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import TemplateView
+from django.contrib.auth.views import LogoutView
+
 from .views import HomePage
+from accounts.views import ApplicantSignUp, ApplicantHome, CompanySignUp, CompanyHome, LoginView
+
 
 urlpatterns = [
+    path('company/home/', CompanyHome.as_view(), name='company-home'),
+    path('signup/company/', CompanySignUp.as_view(extra_context={'title': 'Employer SignUp'}), name='company-signup'),
+    path('applicant/home/', ApplicantHome.as_view(), name='applicant-home'),
+    path('signup/applicant/', ApplicantSignUp.as_view(extra_context={'title': 'Applicant SignUp'}), name='applicant-signup'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('login/', LoginView.as_view(extra_context={'title': 'Login'}), name='login'),
     path('', HomePage.as_view(), name='home'),
     path('admin/', admin.site.urls),
 ]

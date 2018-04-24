@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'widget_tweaks',
+
     'accounts',
 ]
 
@@ -121,6 +123,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Static Files
+# Adds the sitewide static folder so that Django can search it too
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+
 
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.User'
+
+# Login config
+LOGIN_URL = '/login'
+LOGOUR_REDIRECT_URL = ''

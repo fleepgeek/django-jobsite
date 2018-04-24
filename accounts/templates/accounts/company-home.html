@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <section>
+        <div class="container">
+            <h1>Welcome {{ request.user}} to your company page</h1>
+            {{ request.user.is_authenticated }}
+        </div>
+    </section>
+{% endblock content %}
+    

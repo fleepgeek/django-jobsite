@@ -8,6 +8,7 @@ name = "pypi"
 [packages]
 
 django = "*"
+django-widget-tweaks = "*"
 
 
 [dev-packages]

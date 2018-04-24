@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
 from django.contrib.auth import get_user_model, authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
@@ -45,13 +45,28 @@ class UserAdminChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 
-class ApplicantSignUpForm(CleanEmailAndPasswordMixin, forms.ModelForm):
+class ApplicantSignUpForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = ('full_name', 'email')
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        qs = User.objects.filter(email=email)
+        if qs.exists():
+            raise forms.ValidationError("Email already exists")
+        return email
+
+    def clean_password(self):
+        data = self.cleaned_data
+        password1 = data.get('password1')
+        password2 = data.get('password2')
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError('The passwords you entered are not the same')
+        return password2
 
     @transaction.atomic
     def save(self):
@@ -63,7 +78,7 @@ class ApplicantSignUpForm(CleanEmailAndPasswordMixin, forms.ModelForm):
         return user
 
 
-class CompanySignUpForm(CleanEmailAndPasswordMixin, forms.ModelForm):
+class CompanySignUpForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
 
@@ -71,10 +86,34 @@ class CompanySignUpForm(CleanEmailAndPasswordMixin, forms.ModelForm):
         model = User
         fields = ('full_name', 'email')
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        qs = User.objects.filter(email=email)
+        if qs.exists():
+            raise forms.ValidationError("Email already exists")
+        return email
+
+    def clean_password(self):
+        data = self.cleaned_data
+        password1 = data.get('password1')
+        password2 = data.get('password2')
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError('The passwords you entered are not the same')
+        return password2
+
     @transaction.atomic
     def save(self):
         user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
         user.is_employer = True
         user.save()
         company = Company.objects.create(user=user)
         return user
+
+class LoginForm(AuthenticationForm):
+    # username is used here because we set the USERNAME_FIELD = email 
+    # in our custom User model
+    username = forms.EmailField(
+        max_length=254,
+        widget=forms.EmailInput(attrs={'autofocus': True}),
+    )
