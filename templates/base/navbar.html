@@ -2,7 +2,6 @@
     <div class="container">
         <div class="navbar-brand">
           <a class="navbar-item" href="/">
-            {% comment %} <img src="https://bulma.io/images/bulma-logo.png" alt="Logo" width="112" height="28"> {% endcomment %}
             <h1 class="title is-3">Jobsite</h1>
           </a>
           <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
@@ -14,62 +13,55 @@
       
         <div id="navbarExampleTransparentExample" class="navbar-menu">
           <div class="navbar-start">
-            <a class="navbar-item" href="https://bulma.io/">
+            <a class="navbar-item" href="">
               Home
             </a>
-            <a class="navbar-item" href="https://bulma.io/">
+            <a class="navbar-item" href="">
                 Jobs
             </a>
-
           </div>
       
-          
           <div class="navbar-end">
-            <div class="navbar-item">
-              <div class="field is-grouped">
-                {% if not request.user.is_authenticated %}
-                  <p class="control">
-                    <a class="bd-tw-button button" href="{% url 'login' %}">
-                      <span class="icon">
+            {% if not request.user.is_authenticated %}
+              <a class="navbar-item" href="{% url 'login' %}">
+                <p class="button is-primary">
+                    <span class="icon">
                         <i class="fab fa-twitter"></i>
                       </span>
                       <span>
                         Log In
                       </span>
+                </p>
+              </a>
+              
+              <div class="navbar-item has-dropdown is-hoverable">
+                  <a class="navbar-link" href="#">
+                    Sign Up
+                  </a>
+              
+                  <div class="navbar-dropdown">
+                    <a class="navbar-item" href="{% url 'applicant-signup' %}">
+                      Applicant
                     </a>
-                  </p>
-                  <p class="control">
-                    <a class="button is-primary" href="{% url 'applicant-signup' %}">
-                      <span class="icon">
-                        <i class="fas fa-download"></i>
-                      </span>
-                      <span>Applicants Sign Up</span>
-                    </a>
-                  </p>
-                  <p class="control">
-                      <a class="button is-primary" href="{% url 'company-signup' %}">
-                          <span class="icon">
-                          <i class="fas fa-download"></i>
-                          </span>
-                          <span>Employers Sign Up</span>
+                    <a class="navbar-item" href="{% url 'company-signup' %}">
+                      Employer
                       </a>
-                  </p>
-                {% else %}
-                  <p class="control">
-                    <a class="bd-tw-button button" href="{% url 'logout' %}">
-                      <span class="icon">
-                        <i class="fab fa-twitter"></i>
-                      </span>
-                      <span>
-                        Log Out
-                      </span>
-                    </a>
-                  </p>
-                {% endif %}
+                  </div>     
               </div>
-            </div>
+              {% else %}
+                <a class="navbar-item" href="{% url 'logout' %}">
+                  <p class="button is-primary">
+                      <span class="icon">
+                          <i class="fab fa-twitter"></i>
+                        </span>
+                        <span>
+                          Log Out
+                        </span>
+                  </p>
+                </a>
+
+              {% endif %}
           </div>
-          
 
         </div>
     </div>

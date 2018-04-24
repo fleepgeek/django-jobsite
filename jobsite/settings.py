@@ -137,4 +137,4 @@ AUTH_USER_MODEL = 'accounts.User'
 
 # Login config
 LOGIN_URL = '/login'
-LOGOUR_REDIRECT_URL = ''
+LOGOUT_REDIRECT_URL = '/'
