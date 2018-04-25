@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 
+from django.template.defaultfilters import slugify
+
+
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -58,6 +61,21 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.email = self.__class__.objects.normalize_email(self.email)
 
 
+class Industry(models.Model):
+    name = models.CharField(max_length=60)
+    slug = models.SlugField(blank=True)
+
+    class Meta:
+        verbose_name_plural = "Industries"
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Industry, self).save(*args, **kwargs)
+
+
 YEARS_OF_EXP = (
     ('entry', 'Entry Level'),
     ('1-2', '1-2 years'),
@@ -73,6 +91,7 @@ GENDERS = (
 
 class Applicant(models.Model):
     user            = models.OneToOneField(User, on_delete=models.CASCADE)
+    interest        = models.ForeignKey(Industry, on_delete=models.SET_NULL, blank=True, null=True)
     date_of_birth   = models.DateField(null=True, blank=True)
     location        = models.CharField(_('Where do you Reside now'), max_length=20, null=True, blank=True)
     gender          = models.CharField(max_length=10, choices=GENDERS, null=True, blank=True)

@@ -6,14 +6,15 @@
     <div class="container pd-center mg-top">
         <div class="columns">
             <div class="column is-half is-offset-one-quarter card">
-                <h1 class="title is-4">Login</h1>
+                <h1 class="title is-4">Apply for Job: {{ job.title }}</h1>
+                <p class="subtitle">@ {{ job.company.name }}</p>
                 <form action="" method="post" novalidate>
                     {% csrf_token %}
-                    <input type="hidden" name="next" value="{{ next }}">
+                    
                     {% include 'base/form.html' with btn_text='Login' %}
                     <div class="field is-grouped">
                         <div class="control">
-                            <input type="submit" class="button is-primary" value="Login">
+                            <input type="submit" class="button is-primary" value="Apply">
                         </div>
                     </div>
                 </form>

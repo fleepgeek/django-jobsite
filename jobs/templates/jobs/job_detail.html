@@ -8,7 +8,10 @@
                 <div class="column">
                     <p class="title">{{ job.title }}</p>
                     <p class="subtitle">{{ job.company.name }}</p>
-                    <a href="" class="button is-primary is-large">Apply for Job</a>
+                    <form action="{% url 'job_apply' %}" method="get">
+                        <input type="hidden" name="job_id" value="{{ job.pk }}">
+                        <input type="submit" class="button is-primary is-large" value="Apply for Job" >
+                    </form>
                 </div>
                 
             </div>

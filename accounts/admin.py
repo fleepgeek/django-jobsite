@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
-from .models import User, Applicant, Company
+from .models import User, Applicant, Company, Industry
 from .forms import UserAdminCreationForm, UserAdminChangeForm
 
 class UserAdmin(BaseUserAdmin):
@@ -38,3 +38,5 @@ admin.site.unregister(Group)
 
 admin.site.register(Applicant)
 admin.site.register(Company)
+
+admin.site.register(Industry)

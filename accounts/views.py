@@ -58,7 +58,13 @@ class LoginView(LoginView):
     form_class = LoginForm
 
     def get_success_url(self):
-        if self.request.user.is_applicant:
+        next_get = self.request.GET.get('next')
+        next_post = self.request.POST.get('next')
+        next_url = next_get or next_post or None
+        if next_url is not None:
+            return next_url
+            
+        if self.request.user.is_applicant:  
             return '/applicant/home/'
         if self.request.user.is_employer:
             return '/company/home/'
