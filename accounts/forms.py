@@ -60,13 +60,13 @@ class ApplicantSignUpForm(forms.ModelForm):
             raise forms.ValidationError("Email already exists")
         return email
 
-    def clean_password(self):
+    def clean_password2(self):
         data = self.cleaned_data
         password1 = data.get('password1')
         password2 = data.get('password2')
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError('The passwords you entered are not the same')
-        return password2
+        return password1
 
     @transaction.atomic
     def save(self):
@@ -94,13 +94,13 @@ class CompanySignUpForm(forms.ModelForm):
             raise forms.ValidationError("Email already exists")
         return email
 
-    def clean_password(self):
+    def clean_password2(self):
         data = self.cleaned_data
         password1 = data.get('password1')
         password2 = data.get('password2')
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError('The passwords you entered are not the same')
-        return password2
+        return password1
 
     @transaction.atomic
     def save(self):

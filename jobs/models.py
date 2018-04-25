@@ -1,10 +1,12 @@
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.urls import reverse
+
 from accounts.models import Company
 
 class Industry(models.Model):
     name = models.CharField(max_length=60)
-    slug = models.SlugField()
+    slug = models.SlugField(blank=True)
 
     class Meta:
         verbose_name_plural = "Industries"
@@ -14,7 +16,7 @@ class Industry(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        super(Post, self).save(*args, **kwargs)
+        super(Industry, self).save(*args, **kwargs)
 
 
 JOB_TYPES = (
@@ -39,7 +41,7 @@ YEARS_OF_EXP = (
 
 class Job(models.Model):
     title               = models.CharField(max_length=60)
-    slug                = models.SlugField()
+    slug                = models.SlugField(blank=True)
     industry            = models.ForeignKey(Industry, on_delete=models.CASCADE)
     company             = models.ForeignKey(Company, on_delete=models.CASCADE)
     job_type            = models.CharField(max_length=10, choices=JOB_TYPES)
@@ -56,4 +58,7 @@ class Job(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
-        super(Post, self).save(*args, **kwargs)
+        super(Job, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('job', kwargs={'slug': self.slug})
