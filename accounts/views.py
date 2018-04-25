@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import login
-from django.views.generic import CreateView, TemplateView, FormView
+from django.views.generic import CreateView, TemplateView, FormView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 
@@ -16,11 +16,18 @@ class ApplicantSignUp(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('applicant-home')
+        complete_profile = reverse('reg_profile', kwargs={'pk': user.applicant.pk})
+        return redirect(complete_profile)
+
+class UpdateApplicant(ApplicantRequiredMixin, UpdateView):
+    model = Applicant
+    fields = ('date_of_birth','location', 'gender', 'about', 'years_of_exp')
+    template_name = 'accounts/complete_reg.html'
+    success_url = '/applicant/home'
 
 
 class ApplicantHome(ApplicantRequiredMixin, TemplateView):
-    template_name='accounts/applicant-home.html'
+    template_name='accounts/applicant_home.html'
 
 
 class CompanySignUp(CreateView):
@@ -31,11 +38,19 @@ class CompanySignUp(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('company-home')
+        complete_company = reverse('reg_company', kwargs={'pk': user.company.pk})
+        return redirect(complete_company)
+
+
+class UpdateCompany(CompanyRequiredMixin, UpdateView):
+    model = Company
+    fields = ('name', 'description', 'website', 'country', 'state')
+    template_name = 'accounts/complete_reg.html'
+    success_url = '/company/home'
 
 
 class CompanyHome(CompanyRequiredMixin, TemplateView):
-    template_name='accounts/company-home.html'
+    template_name='accounts/company_home.html'
 
 
 class LoginView(LoginView):

@@ -132,7 +132,6 @@ STATICFILES_DIRS = [
 ]
 
 
-
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.User'
 

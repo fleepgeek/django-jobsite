@@ -12,7 +12,10 @@
                     {% include 'base/form.html' with btn_text='Login' %}
                     <div class="field is-grouped">
                         <div class="control">
-                            <input type="submit" class="button is-primary" value="Sign Up">
+                            <a href="{% url 'applicant_home' %}" class="button is-info">Skip</a>
+                        </div>
+                        <div class="control">
+                            <input type="submit" class="button is-primary" value="Create">
                         </div>
                     </div>
                 </form>

@@ -66,13 +66,18 @@ YEARS_OF_EXP = (
     ('above 10', 'Above 10 years')
 )
 
+GENDERS = (
+    ('male', 'Male'),
+    ('female', 'Female')
+)
+
 class Applicant(models.Model):
     user            = models.OneToOneField(User, on_delete=models.CASCADE)
     date_of_birth   = models.DateField(null=True, blank=True)
     location        = models.CharField(_('Where do you Reside now'), max_length=20, null=True, blank=True)
-    gender          = models.CharField(max_length=1, null=True, blank=True)
+    gender          = models.CharField(max_length=10, choices=GENDERS, null=True, blank=True)
     about           = models.TextField(blank=True, null=True)
-    years_of_exp        = models.CharField('Years of Experience', max_length=20, choices=YEARS_OF_EXP, null=True, blank=True)
+    years_of_exp    = models.CharField('Years of Experience', max_length=20, choices=YEARS_OF_EXP, null=True, blank=True)
     
     def __str__(self):
         return self.user.full_name

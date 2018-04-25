@@ -3,6 +3,8 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationF
 from django.contrib.auth import get_user_model, authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
+# from django.contrib.admin.widgets import AdminDateWidget
+
 
 from .models import Applicant, Company
 from .mixins import CleanEmailAndPasswordMixin

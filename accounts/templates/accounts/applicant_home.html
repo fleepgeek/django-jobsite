@@ -4,8 +4,10 @@
 {% block content %}
     <section>
         <div class="container">
-            <h1>Welcome {{ request.user}} to your company page</h1>
+            <h1>Welcome {{ request.user}}</h1>
             {{ request.user.is_authenticated }}
+            <p>{{request.user.applicant.about}}</p>
         </div>
     </section>
 {% endblock content %}
+    
