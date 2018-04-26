@@ -19,14 +19,14 @@ from django.views.generic import TemplateView
 from django.contrib.auth.views import LogoutView
 
 from .views import HomePage
-from accounts.views import ApplicantSignUp, ApplicantHome, CompanySignUp, CompanyHome, LoginView, UpdateApplicant, UpdateCompany
+from accounts.views import ApplicantSignUp, ApplicantHome, CompanySignUp, LoginView, UpdateApplicant, UpdateCompany
 
 
 urlpatterns = [
+    path('company/', include('companydashboard.urls')),
     path('jobs/', include('jobs.urls')),
     path('reg/company/<int:pk>/', UpdateCompany.as_view(extra_context={'title': 'Complete your Company\'s Profile'}), name='reg_company'),
     path('reg/profile/<int:pk>/', UpdateApplicant.as_view(extra_context={'title': 'Complete your Profile'}), name='reg_profile'),
-    path('company/home/', CompanyHome.as_view(), name='company_home'),
     path('signup/company/', CompanySignUp.as_view(extra_context={'title': 'Employer SignUp'}), name='company_signup'),
     path('applicant/home/', ApplicantHome.as_view(), name='applicant_home'),
     path('signup/applicant/', ApplicantSignUp.as_view(extra_context={'title': 'Applicant SignUp'}), name='applicant_signup'),

@@ -49,10 +49,6 @@ class UpdateCompany(CompanyRequiredMixin, UpdateView):
     success_url = '/company/home'
 
 
-class CompanyHome(CompanyRequiredMixin, TemplateView):
-    template_name='companydashboard/home.html'
-
-
 class LoginView(LoginView):
     template_name = 'accounts/login.html'
     form_class = LoginForm
