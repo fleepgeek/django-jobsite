@@ -8,6 +8,7 @@
         <div class="column box">
             <form action="" method="post" novalidate>
                 {% csrf_token %}
+                {{ form.media }}
                 <input type="hidden" name="next" value="{{ next }}">
                 {% include 'base/form.html' with btn_text='Login' %}
                 <div class="field is-grouped">

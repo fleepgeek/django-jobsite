@@ -12,7 +12,7 @@
 
   {% include 'base/navbar.html' %}
 
-  <div class="container mg-top">
+  <div class="container mg-top-sm">
     {% if messages %}
       {% for message in messages %}
         <div{% if message.tags %} class="notification {{ message.tags }}"{% endif %}>

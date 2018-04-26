@@ -3,6 +3,7 @@ from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
+from ckeditor.fields import RichTextField
 
 from accounts.models import Company, Industry, Applicant
 
@@ -37,7 +38,7 @@ class Job(models.Model):
     min_qualification   = models.CharField('Minimum Qualification', max_length=10, choices=MIN_QUALIFICATIONS, null=True, blank=True)
     years_of_exp        = models.CharField('Years of Experience', max_length=20, choices=YEARS_OF_EXP, null=True, blank=True)
     salary              = models.PositiveIntegerField(blank=True, null=True)
-    description         = models.TextField()
+    description         = RichTextField()
     # expires_on = models.DateTimeField()
     posted_on           = models.DateTimeField(auto_now_add=True)
     updated_on          = models.DateTimeField(auto_now=True)

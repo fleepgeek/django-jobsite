@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "68bdf318e8f62fe00666c6c30c922783cc2e60f8a2ee143192b26988cc2a5505"
+            "sha256": "84a76951bc7d4da506dd2ebf07bfbcda690b7f1f12892f81e818b2dc399fa164"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -33,6 +33,19 @@
                 "sha256:d81a1652963c81488e709729a80b510394050e312f386037f26b54912a3a10d0"
             ],
             "version": "==2.0.4"
+        },
+        "django-ckeditor": {
+            "hashes": [
+                "sha256:b49eb630a260eb17dd225ea38b42d58fabc9a8dbbc898224c61f9a570c29e961"
+            ],
+            "version": "==5.4.0"
+        },
+        "django-js-asset": {
+            "hashes": [
+                "sha256:a395d8d19eb201ea8d2bd4f145b38f1717cd74c0f609f040141d8724c5a27f36",
+                "sha256:30149158206f693a5d027fe590096fc84495486bd11cd77d395b4f2ec27fc1d0"
+            ],
+            "version": "==1.1.0"
         },
         "django-widget-tweaks": {
             "hashes": [

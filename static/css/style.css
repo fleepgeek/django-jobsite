@@ -6,6 +6,10 @@
     margin-top: 40px;
 }
 
+.mg-top-sm {
+    margin-top: 5px;
+}
+
 body > div > div > div > div.column.is-8 > article > div.media-content > div > p:nth-child(1) {
     margin-bottom: .2em ;
 }

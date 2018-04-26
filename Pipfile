@@ -9,6 +9,7 @@ name = "pypi"
 
 django = "*"
 django-widget-tweaks = "*"
+django-ckeditor = "*"
 
 
 [dev-packages]

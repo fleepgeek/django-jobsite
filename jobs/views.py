@@ -34,7 +34,7 @@ class JobDelete(CompanyRequiredMixin, DeleteView):
     success_url = reverse_lazy('jobs')
 
 
-class JobsByCompany(ListView):
+class JobsByCompany(CompanyRequiredMixin, ListView):
     template_name = 'companydashboard/job_list.html'
     company = None
     def get_queryset(self):

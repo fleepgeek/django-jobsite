@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'widget_tweaks',
+    'ckeditor',
 
     'accounts',
     'jobs',
@@ -132,6 +133,13 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_cdn', 'static_root')
+
+# Media Files
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static_cdn', 'media_root')
+
 
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.User'
@@ -149,4 +157,18 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'is-success',
     messages.WARNING: 'is-warning',
     messages.ERROR: 'is-danger',
+}
+
+# CKEDITOR Settings
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Link', 'Unlink'],
+            ['RemoveFormat', 'Source']
+        ]
+    }
 }

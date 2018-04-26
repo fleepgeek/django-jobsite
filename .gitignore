@@ -2,6 +2,8 @@
 
 static/
 
+static_cdn/
+
 .vscode/
 
 .DS_STORE

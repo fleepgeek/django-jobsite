@@ -19,7 +19,11 @@
                 <div class="column is-8">
                         <div class="content">
                             <div class="content">
-                                <p>{{ job.description }}</p>
+                                <p>
+                                    {% autoescape off %}
+                                    {{ job.description }}
+                                    {% endautoescape %}
+                                </p>
                             </div>
                         </div>
                 </div>
