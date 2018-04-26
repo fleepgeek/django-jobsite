@@ -5,20 +5,26 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 # from django.contrib.admin.widgets import AdminDateWidget
 
-
 from .models import Applicant, Company
-from .mixins import CleanEmailAndPasswordMixin
 
 User = get_user_model()
 
 
-class UserAdminCreationForm(CleanEmailAndPasswordMixin, forms.ModelForm):
+class UserAdminCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = ('full_name', 'email',)
+
+    def clean_password2(self):
+        data = self.cleaned_data
+        password1 = data.get('password1')
+        password2 = data.get('password2')
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError('The passwords you entered are not the same')
+        return password1
 
     def save(self, commit=True):
         # Save the provided password in hashed format

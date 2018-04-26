@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, FormView, View
+from django.contrib import messages
 
 from .models import Job, Application
 from accounts.mixins import ApplicantRequiredMixin
@@ -23,10 +24,9 @@ class JobApply(ApplicantRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         job_id = request.GET.get('job_id')
         job = get_object_or_404(Job, pk=job_id)
-        applicant = request.user.applicant
-        qs = Application.objects.filter(job=job, applicant=applicant)
-        if qs.exists():
-            print("You already applied for this job")
+        obj, created = Application.objects.get_or_apply(request, job)
+        if not created:
+            messages.info(request, 'You already applied for this job')
         else:
-            Application.objects.create(job=job, applicant=applicant)
+            messages.success(request, 'Thanks for your Application')
         return redirect('job', job.slug)

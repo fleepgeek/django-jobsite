@@ -138,3 +138,14 @@ AUTH_USER_MODEL = 'accounts.User'
 # Login config
 LOGIN_URL = '/login'
 LOGOUT_REDIRECT_URL = '/'
+
+# Messages style config
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'is-link',
+    messages.INFO: 'is-info',
+    messages.SUCCESS: 'is-success',
+    messages.WARNING: 'is-warning',
+    messages.ERROR: 'is-danger',
+}

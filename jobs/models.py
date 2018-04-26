@@ -2,6 +2,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.conf import settings
+from django.shortcuts import render, redirect, get_object_or_404
 
 from accounts.models import Company, Industry, Applicant
 
@@ -59,12 +60,29 @@ APPLICATION_STATUS = (
     ('rejected', 'Rejected')
 )
 
+class ApplicationManager(models.Manager):
+    def get_or_apply(self, request, job):
+        obj = None
+        created = False
+        if request.user.is_applicant:
+            applicant = request.user.applicant
+            qs = self.get_queryset().filter(job=job, applicant=applicant)
+            if qs.exists():
+                obj = qs.first()
+            else:
+                obj = self.model.objects.create(job=job, applicant=applicant)
+                created = True
+                print("New Application")
+        return obj, created
+
 class Application(models.Model):
     applicant   = models.ForeignKey(Applicant, on_delete=models.CASCADE, blank=True, null=True)
     job         = models.ForeignKey(Job, on_delete=models.CASCADE, blank=True, null=True)
     applied_on  = models.DateTimeField(auto_now_add=True)
     status      = models.CharField(max_length=20, choices=APPLICATION_STATUS, default='applied') 
     # add resume and cover letter
+
+    objects = ApplicationManager()
 
     def __str__(self):
         return self.applicant.user.full_name
