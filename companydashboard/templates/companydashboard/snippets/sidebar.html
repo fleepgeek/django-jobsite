@@ -3,14 +3,14 @@
             General
         </p>
         <ul class="menu-list">
-            <li><a>Dashboard</a></li>
+            <li><a href="{% url 'company_home' %}">Dashboard</a></li>
         </ul>
         <p class="menu-label">
             Jobs
         </p>
         <ul class="menu-list">
-            <li><a>Manage Jobs</a></li>
-            <li><a>Post Job</a></li>
+            <li><a href="{% url 'company_jobs' %}">Manage Jobs</a></li>
+            <li><a href="{% url 'job_create' %}">Post Job</a></li>
         </ul>
         <p class="menu-label">
             Profile

@@ -1,0 +1,23 @@
+{% extends "companydashboard/base.html" %}
+
+{% block page_title %} {{ title }} {% endblock %}
+
+{% block dashcontent %}
+
+    <div class="columns">
+        <div class="column box">
+            <form action="" method="post" novalidate>
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+                {% include 'base/form.html' with btn_text='Login' %}
+                <div class="field is-grouped">
+                    <div class="control">
+                        <input type="submit" class="button is-primary" value="Create">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock dashcontent %}
+    

@@ -1,0 +1,25 @@
+{% extends "companydashboard/base.html" %}
+
+{% block page_title %} {{ title }} {% endblock %}
+
+{% block dashcontent %}
+
+    <div class="columns">
+        <div class="column card">
+            <h1 class="title">Are you sure you want to delete this Job?</h1>
+            <p class="subtitle">{{object.title}}</p>
+            <form action="" method="post" novalidate>
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+                {% include 'base/form.html' %}
+                <div class="field is-grouped">
+                    <div class="control">
+                        <input type="submit" class="button is-primary" value="Delete">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock dashcontent %}
+    
