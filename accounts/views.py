@@ -50,7 +50,7 @@ class UpdateCompany(CompanyRequiredMixin, UpdateView):
 
 
 class CompanyHome(CompanyRequiredMixin, TemplateView):
-    template_name='accounts/company_home.html'
+    template_name='companydashboard/home.html'
 
 
 class LoginView(LoginView):

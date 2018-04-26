@@ -12,6 +12,10 @@ class JobDetail(DetailView):
     model = Job
     template_name='jobs/job_detail.html'
 
+class JobCreate(CreateView):
+    model = Job
+    fields = ('title', 'industry', 'job_type', 'min_qualification', 'years_of_exp', 'salary', 'description',)
+
 class JobApply(ApplicantRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         job_id = request.GET.get('job_id')
