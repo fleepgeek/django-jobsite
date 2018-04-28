@@ -62,26 +62,32 @@ APPLICATION_STATUS = (
 )
 
 class ApplicationManager(models.Manager):
-    def get_or_apply(self, request, job):
-        obj = None
-        created = False
-        if request.user.is_applicant:
-            applicant = request.user.applicant
+    def has_applied(self, user, job):
+        applied = False
+        msg = 'Thanks for your Application'
+        if user.is_applicant:
+            applicant = user.applicant
             qs = self.get_queryset().filter(job=job, applicant=applicant)
             if qs.exists():
-                obj = qs.first()
-            else:
-                obj = self.model.objects.create(job=job, applicant=applicant)
-                created = True
-                print("New Application")
-        return obj, created
+                applied = True
+                msg = 'You have previously applied for this job'  
+        else:
+            msg = 'You are not eligible to apply for this job'       
+        return applied, msg
+
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/documents/user_<id>/<filename>
+    return 'documents/user_{0}/{1}'.format(instance.applicant.user.id, filename)
 
 class Application(models.Model):
-    applicant   = models.ForeignKey(Applicant, on_delete=models.CASCADE, blank=True, null=True)
-    job         = models.ForeignKey(Job, on_delete=models.CASCADE, blank=True, null=True)
-    applied_on  = models.DateTimeField(auto_now_add=True)
-    status      = models.CharField(max_length=20, choices=APPLICATION_STATUS, default='applied') 
+    applicant       = models.ForeignKey(Applicant, on_delete=models.CASCADE, blank=True, null=True)
+    job             = models.ForeignKey(Job, on_delete=models.CASCADE, blank=True, null=True)
+    applied_on      = models.DateTimeField(auto_now_add=True)
+    status          = models.CharField(max_length=20, choices=APPLICATION_STATUS, default='applied') 
     # add resume and cover letter
+    resume          = models.FileField(upload_to=user_directory_path, null=True)
+    cover_letter    = models.TextField(max_length=100, null=True)
+
 
     objects = ApplicationManager()
 

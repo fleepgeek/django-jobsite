@@ -22,6 +22,7 @@
             <tr>
                 <th>No</th>
                 <th>Applicant Name</th>
+                <th>Resume</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -30,6 +31,7 @@
             <tr>
                 <td width="5%">{{forloop.counter}}</td>
                 <td><a href="{% url 'company_job_detail' job.pk %}">{{ app.applicant.user.full_name }}</a></td>
+                <td><a href="{{ app.resume.url }}">Download Resume</a></td>
                 <td><a class="button is-small is-primary" href="#">{{ app.status }}</a></td>
             </tr>
             {% empty %}

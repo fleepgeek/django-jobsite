@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 
 from .models import Job, Application
+from .forms import ApplicationForm
 from accounts.mixins import ApplicantRequiredMixin, CompanyRequiredMixin
 from accounts.models import Company
 
@@ -60,21 +61,31 @@ class JobsByCompanyDetail(CompanyRequiredMixin, DetailView):
     
 
 
-class JobApply(ApplicantRequiredMixin, View):
-    def get(self, request, *args, **kwargs):
-        job_id = request.GET.get('job_id')
-        job = get_object_or_404(Job, pk=job_id)
-        context = {
-            'job': job,
-        }
-        return render(request, 'jobs/job_apply.html', context)
+class JobApply(ApplicantRequiredMixin, CreateView):
+    model = Application
+    # form_class = ApplicationForm()
+    template_name = 'jobs/job_apply.html'
+    fields = ('resume', 'cover_letter',)
 
-    def post(self, request, *args, **kwargs):
+    def get_context_data(self, *args, **kwargs):
+        context = super(JobApply, self).get_context_data(**kwargs)
+        job_id = self.request.GET.get('job_id')
+        self.job = get_object_or_404(Job, pk=job_id)
+        context['job'] = self.job
+        return context
+    
+    def form_valid(self, form, **kwargs):
+        request = self.request
         job_id = request.GET.get('job_id')
         job = get_object_or_404(Job, pk=job_id)
-        obj, created = Application.objects.get_or_apply(request, job)
-        if not created:
-            messages.info(request, 'You already applied for this job')
+        has_applied, msg = Application.objects.has_applied(request.user, job)
+        if not has_applied:
+            applicant = request.user.applicant
+            form.instance.applicant = applicant
+            form.instance.job = job
+            form.save()
+            messages.success(request, msg)
         else:
-            messages.success(request, 'Thanks for your Application')
+            messages.info(request, msg)
+
         return redirect('job', job.slug)

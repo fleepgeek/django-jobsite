@@ -7,5 +7,5 @@ $(document).ready(function() {
         nav_burger.toggleClass('is-active')
         nav_menu.toggleClass('is-active')
     })
-    
+
 })

@@ -13,14 +13,14 @@
                 </div>
                 <div class="column is-4-tablet is-10-mobile name">
                   <p>
-                    <span class="title is-bold">Paul Miller</span>
+                    <span class="title is-bold">{{ request.user.full_name }}</span>
                     <br />
                     <a id="edit-preferences" class="button is-primary is-outlined mg-sm">
                       Edit Profile</a>
                     <br />
                   </p>
                   <p class="tagline">
-                    The users profile bio would go here, of course. It could be two lines or more or whatever. We should probably limit the amount of characters to ~500 at most though.
+                      {{ request.user.applicant.about }}
                   </p>
                 </div>
                 <div class="column is-2-tablet is-4-mobile has-text-centered">
@@ -50,21 +50,16 @@
 
                     <table class="table is-fullwidth is-hoverable">
                         <tbody>
-                        <tr>
-                            <td width="5%"><i class="fa fa-briefcase"></i></td>
-                            <td>Lorum ipsum dolem aire</td>
-                            <td><a class="button is-small is-primary" href="#">View</a></td>
-                        </tr>
-                        <tr>
-                            <td width="5%"><i class="fa fa-briefcase"></i></td>
-                            <td>Lorum ipsum dolem aire</td>
-                            <td><a class="button is-small is-primary" href="#">View</a></td>
-                        </tr>
-                        <tr>
-                            <td width="5%"><i class="fa fa-briefcase"></i></td>
-                            <td>Lorum ipsum dolem aire</td>
-                            <td><a class="button is-small is-primary" href="#">View</a></td>
-                        </tr>
+                            {% for app in application_list %}
+                                <tr>
+                                    <td width="5%">{{ forloop.counter }}</td>
+                                    <td><a href="{{ app.job.get_absolute_url }}">{{ app.job }}</a></td>
+                                    <td><a class="button is-small is-info" href="#">{{ app.status }}</a></td>
+                                </tr>
+                            {% empty %}
+                                <h1 class="title">You have no Applications Yet!</h1>
+                            {% endfor %}
+                        
                         </tbody>
                     </table>
 
