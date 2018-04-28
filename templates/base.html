@@ -12,17 +12,17 @@
 
   {% include 'base/navbar.html' %}
 
-  <div class="container mg-top-sm">
-    {% if messages %}
-      {% for message in messages %}
-        <div{% if message.tags %} class="notification {{ message.tags }}"{% endif %}>
-          {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
-          {{ message }}
-        </div>
-      {% endfor %}
-    {% endif %}
-  </div>
   
+    {% if messages %}
+      <div class="container mg-top"></div>
+        {% for message in messages %}
+          <div{% if message.tags %} class="notification {{ message.tags }}"{% endif %}>
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}  
   
       
   {% block content %}

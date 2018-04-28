@@ -26,10 +26,6 @@ class UpdateApplicant(ApplicantRequiredMixin, UpdateView):
     success_url = '/applicant/home'
 
 
-class ApplicantHome(ApplicantRequiredMixin, TemplateView):
-    template_name='accounts/applicant_home.html'
-
-
 class CompanySignUp(CreateView):
     model = Company
     form_class = CompanySignUpForm

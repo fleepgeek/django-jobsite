@@ -10,10 +10,25 @@
     margin-top: 5px;
 }
 
+.mg-sm {
+    margin: 5px 0px;
+}
+
 body > div > div > div > div.column.is-8 > article > div.media-content > div > p:nth-child(1) {
     margin-bottom: .2em ;
 }
 
 body > div > div > div > div.column.is-8 > article > div.media-content > div > nav {
     margin-bottom: .1em;
+}
+
+.stat-val {
+    font-size: 3em;
+    padding-top: 20px;
+    font-weight: bold;
+}
+
+.stat-key {
+    font-size: 1.4em;
+    font-weight: 200
 }
