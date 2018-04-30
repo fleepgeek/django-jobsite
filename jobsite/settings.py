@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'jobs',
     'companydashboard',
     'applicantprofile',
+    'payments',
 ]
 
 MIDDLEWARE = [
@@ -173,3 +174,7 @@ CKEDITOR_CONFIGS = {
         ]
     }
 }
+
+# Stripe Keys
+STRIPE_PUB_KEY = os.environ.get('STRIPE_PUB_KEY')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')

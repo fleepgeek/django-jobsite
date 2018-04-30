@@ -85,6 +85,12 @@ class ApplicantSignUpForm(forms.ModelForm):
         applicant = Applicant.objects.create(user=user)
         return user
 
+class ApplicantForm(forms.ModelForm):
+    date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type':'date'}))
+    class Meta:
+        model = Applicant
+        fields = ('date_of_birth','location', 'gender', 'about', 'years_of_exp')
+
 
 class CompanySignUpForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)

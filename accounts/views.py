@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 
 from .models import Applicant, Company
-from .forms import ApplicantSignUpForm, CompanySignUpForm, LoginForm
+from .forms import ApplicantSignUpForm, CompanySignUpForm, LoginForm, ApplicantForm
 from .mixins import ApplicantRequiredMixin, CompanyRequiredMixin
 
 class ApplicantSignUp(CreateView):
@@ -21,7 +21,7 @@ class ApplicantSignUp(CreateView):
 
 class UpdateApplicant(ApplicantRequiredMixin, UpdateView):
     model = Applicant
-    fields = ('date_of_birth','location', 'gender', 'about', 'years_of_exp')
+    form_class = ApplicantForm
     template_name = 'accounts/complete_reg.html'
     success_url = '/applicant/home'
 

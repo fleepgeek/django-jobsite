@@ -12,7 +12,11 @@
                     {% include 'base/form.html' with btn_text='Login' %}
                     <div class="field is-grouped">
                         <div class="control">
-                            <a href="{% url 'applicant_home' %}" class="button is-info">Skip</a>
+                            {% if request.user.is_applicant %}
+                                <a href="{% url 'applicant_home' %}" class="button is-info">Skip</a>
+                            {% elif request.user.is_employer %}
+                                <a href="{% url 'company_home' %}" class="button is-info">Skip</a>
+                            {% endif %} 
                         </div>
                         <div class="control">
                             <input type="submit" class="button is-primary" value="Create">

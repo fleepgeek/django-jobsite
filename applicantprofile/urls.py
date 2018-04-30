@@ -4,5 +4,5 @@ from django.views.generic import TemplateView
 from applicantprofile import views
 
 urlpatterns = [
-    path('home/', views.ApplicantHome.as_view(), name='ss'),
+    path('home/', views.ApplicantHome.as_view(), name='applicant_home'),
 ]
