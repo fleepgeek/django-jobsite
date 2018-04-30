@@ -4,6 +4,18 @@
 
 {% block dashcontent %}
 
+    <h1 class='title is-5'>Your Cards</h1>
+    
+    <div class='content'>
+        {% for card in cards %}
+            <span class="tag is-light is-medium">{{ card.last4 }} | {{ card.brand }}</span>
+        {% empty %}
+            <p>You dont have any cards</p>
+        {% endfor %}
+    </div>
+            
+    <h1 class='title is-5'>Add Card</h1>
+
     <form action="/charge" method="post" id="payment-form">
         <div class="form-row">
             <label for="card-element">
