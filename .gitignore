@@ -2,13 +2,14 @@
 
 static/
 
+db.sqlite3
+
 static_cdn/
 
 .vscode/
 
 .DS_STORE
 
-*.sqlite3
 
 # Virtualenv related
 bin/
