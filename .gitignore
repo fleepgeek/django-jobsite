@@ -8,7 +8,7 @@ static_cdn/
 
 .DS_STORE
 
-.sqlite3
+*.sqlite3
 
 # Virtualenv related
 bin/
