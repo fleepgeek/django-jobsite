@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.views import View
+from django.views.generic import CreateView, DetailView
 from django.http import JsonResponse, HttpResponse
+from django.urls import reverse
 
-from .models import PaymentProfile, Card
+from .models import PaymentProfile, Card, Voucher, Order
 from accounts.mixins import CompanyRequiredMixin
 
 
@@ -22,3 +24,27 @@ class AddCard(CompanyRequiredMixin, View):
             return JsonResponse({'msg': 'Token Success'})
         return HttpResponse('error', status_code=401)
 
+
+class MakeOrder(CreateView):
+    model = Order
+    fields = ('quantity',)
+    template_name = 'companydashboard/make_order.html'
+
+    def form_valid(self, form):
+        request = self.request
+        form.instance.payment_profile = request.user.paymentprofile
+        return super(MakeOrder, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('checkout')
+
+
+
+class CheckoutView(View):
+    def get(self, request, *args, **kwargs):
+        qs = Order.objects.filter(payment_profile = request.user.paymentprofile, active=True)
+        order = qs.first()
+        context = {
+            'order': order
+        }
+        return render(request, 'payments/checkout.html', context)

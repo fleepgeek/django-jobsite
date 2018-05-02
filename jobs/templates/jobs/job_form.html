@@ -6,17 +6,24 @@
 
     <div class="columns">
         <div class="column box">
-            <form action="" method="post" novalidate>
-                {% csrf_token %}
-                {{ form.media }}
-                <input type="hidden" name="next" value="{{ next }}">
-                {% include 'base/form.html' with btn_text='Login' %}
-                <div class="field is-grouped">
-                    <div class="control">
-                        <input type="submit" class="button is-primary" value="Create">
+            {% if not request.user.paymentprofile.has_voucher and is_create %}
+                <h1 class="title is-4">You dont have Vouchers to Post a Job</h1>
+                <a href="{% url 'make_order' %}" class="button is-primary">Buy Voucher</a>
+            {% else %} 
+                <form action="" method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form.media }}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    {% include 'base/form.html' with btn_text='Login' %}
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <input type="submit" class="button is-primary" value="Create">
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            {% endif %}
+                
+            
         </div>
     </div>
 

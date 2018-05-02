@@ -1,6 +1,11 @@
+from decimal import Decimal
+
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.conf import settings
+
+from accounts.models import Company
+from jobsite.utils import random_string_generator, current_time_milli
 
 User = settings.AUTH_USER_MODEL
 
@@ -18,6 +23,13 @@ class PaymentProfile(models.Model):
 
     def __str__(self):
         return self.email
+
+    @property
+    def has_voucher(self):
+        vouchers = self.user.company.voucher_set
+        if vouchers.exists():
+            return True
+        return False
 
 def user_post_save_receiver(sender, instance, created, *args, **kwargs):
     if created and instance.is_employer:
@@ -77,3 +89,48 @@ def card_post_save_receiver(sender, instance, created, *args, **kwargs):
             qs.update(default=False)
     
 post_save.connect(card_post_save_receiver, sender=Card)
+
+
+class Voucher(models.Model):
+    voucher_id  = models.CharField(max_length=50)
+    company     = models.ForeignKey(Company, on_delete=models.CASCADE, blank=True, null=True)
+    active      = models.BooleanField(default=True)
+    created_on  = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.voucher_id
+
+
+class Order(models.Model):
+    STATUS_CHOICES = (
+        ('created', 'Created'),
+        ('paid', 'Paid'),
+        ('abandoned', 'Abandoned'),
+    )
+    order_id        = models.CharField(max_length=50)
+    payment_profile = models.ForeignKey(PaymentProfile, on_delete=models.CASCADE, blank=True, null=True)
+    quantity        = models.PositiveIntegerField(default=1)
+    total           = models.DecimalField(default=0.00, max_digits=50, decimal_places=2)
+    status          = models.CharField(max_length=50, choices=STATUS_CHOICES, default='created')
+    active          = models.BooleanField(default=True)
+    created_on      = models.DateTimeField(auto_now_add=True)
+    updated_on      = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.order_id
+
+def order_pre_save_receiver(sender, instance, *args, **kwargs):
+    if not instance.order_id:
+        instance.order_id = random_string_generator() + str(current_time_milli())
+    instance.total = Decimal(instance.quantity) * Decimal(10.00)
+    
+pre_save.connect(order_pre_save_receiver, sender=Order)
+
+
+def order_post_save_receiver(sender, created, instance, *args, **kwargs):
+    if created:
+        qs = Order.objects.filter(payment_profile=instance.payment_profile, active=True).exclude(id=instance.id)
+        if qs.exists():
+            qs.update(active=False, status='abandoned')
+
+post_save.connect(order_post_save_receiver, sender=Order)

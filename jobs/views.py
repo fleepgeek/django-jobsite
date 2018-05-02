@@ -21,6 +21,12 @@ class JobCreate(CompanyRequiredMixin, CreateView):
     model = Job
     fields = ('title', 'industry', 'job_type', 'min_qualification', 'years_of_exp', 'salary', 'description',)
 
+    
+    def get_context_data(self, **kwargs):
+        context = super(JobCreate, self).get_context_data(**kwargs)
+        context['is_create'] = True
+        return context
+
     def form_valid(self, form):
         form.instance.company = self.request.user.company
         return super().form_valid(form)
