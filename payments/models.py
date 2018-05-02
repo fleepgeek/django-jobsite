@@ -29,7 +29,7 @@ def user_post_save_receiver(sender, instance, created, *args, **kwargs):
 post_save.connect(user_post_save_receiver, sender=User)
 
 
-def payment_profile_pre_save_receiver(instance, *args, **kwargs): 
+def payment_profile_pre_save_receiver(sender, instance, *args, **kwargs): 
     customer = stripe.Customer.create(email=instance.email)
     instance.customer_id = customer.id
 
@@ -69,3 +69,11 @@ class Card(models.Model):
 
     def __str__(self):
         return self.card_id
+
+def card_post_save_receiver(sender, instance, created, *args, **kwargs):
+    if created:
+        qs = Card.objects.filter(default=True).exclude(id=instance.id)
+        if qs.exists():
+            qs.update(default=False)
+    
+post_save.connect(card_post_save_receiver, sender=Card)
