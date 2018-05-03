@@ -6,6 +6,7 @@ from payments import views as payviews
 from .views import CompanyHome
 
 urlpatterns = [
+    path('order/success/', TemplateView.as_view(template_name='payments/checkout_success.html'), name='checkout_success'),
     path('order/checkout/', payviews.CheckoutView.as_view(), name='checkout'),
     path('order/create', payviews.MakeOrder.as_view(), name='make_order'),
     path('payment/cards', payviews.AddCard.as_view(), name='cards'),

@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import CreateView, DetailView
 from django.http import JsonResponse, HttpResponse
 from django.urls import reverse
 
-from .models import PaymentProfile, Card, Voucher, Order
+from .models import PaymentProfile, Card, Voucher, Order, Charge
 from accounts.mixins import CompanyRequiredMixin
 
 
@@ -40,11 +40,28 @@ class MakeOrder(CreateView):
 
 
 
-class CheckoutView(View):
+class CheckoutView(CompanyRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        qs = Order.objects.filter(payment_profile = request.user.paymentprofile, active=True)
+        qs = Order.objects.filter(payment_profile=request.user.paymentprofile, active=True)
         order = qs.first()
         context = {
             'order': order
         }
+        if order is None:
+            return redirect('make_order')
         return render(request, 'payments/checkout.html', context)
+    
+    def post(self, request, *args, **kwargs):
+        order_id = request.POST.get('order_id')
+        order = Order.objects.get(order_id=order_id)
+        payment_profile, created = PaymentProfile.objects.get_or_create(user=request.user)
+        paid, message = Charge.objects.take(payment_profile, order)
+        if paid:
+            return redirect('checkout_success')
+        context = {
+            'charge_error': True,
+            'error_message': 'An Error Occured, Please Try again'
+        }
+        return render(request, 'payments/checkout.html', context)
+
+
