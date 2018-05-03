@@ -3,5 +3,8 @@ from django.contrib import admin
 from .models import Job, Application
 
 
-admin.site.register(Job)
+class JobAdmin(admin.ModelAdmin):
+    readonly_fields = ('voucher',)
+
+admin.site.register(Job, JobAdmin)
 admin.site.register(Application)

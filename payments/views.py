@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, TemplateView
 from django.http import JsonResponse, HttpResponse
 from django.urls import reverse
 
@@ -28,7 +28,7 @@ class AddCard(CompanyRequiredMixin, View):
 class MakeOrder(CreateView):
     model = Order
     fields = ('quantity',)
-    template_name = 'companydashboard/make_order.html'
+    template_name = 'companydashboard/buy_voucher.html'
 
     def form_valid(self, form):
         request = self.request
@@ -48,7 +48,7 @@ class CheckoutView(CompanyRequiredMixin, View):
             'order': order
         }
         if order is None:
-            return redirect('make_order')
+            return redirect('buy_voucher')
         return render(request, 'payments/checkout.html', context)
     
     def post(self, request, *args, **kwargs):
@@ -65,3 +65,5 @@ class CheckoutView(CompanyRequiredMixin, View):
         return render(request, 'payments/checkout.html', context)
 
 
+class CheckoutSuccess(CompanyRequiredMixin, TemplateView):
+    template_name='payments/checkout_success.html'

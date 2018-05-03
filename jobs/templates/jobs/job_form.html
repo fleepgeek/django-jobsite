@@ -8,8 +8,9 @@
         <div class="column box">
             {% if not request.user.paymentprofile.has_voucher and is_create %}
                 <h1 class="title is-4">You dont have Vouchers to Post a Job</h1>
-                <a href="{% url 'make_order' %}" class="button is-primary">Buy Voucher</a>
+                <a href="{% url 'buy_voucher' %}" class="button is-primary">Buy Voucher</a>
             {% else %} 
+                <h1 class="title is-4">You have {{ request.user.paymentprofile.voucher_count }} job Vouchers</h1>
                 <form action="" method="post" novalidate>
                     {% csrf_token %}
                     {{ form.media }}

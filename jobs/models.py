@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.signals import pre_save, post_save
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.conf import settings
@@ -6,6 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from ckeditor.fields import RichTextField
 
 from accounts.models import Company, Industry, Applicant
+from payments.models import Voucher
 
 User = settings.AUTH_USER_MODEL
 
@@ -30,6 +32,7 @@ YEARS_OF_EXP = (
 )
 
 class Job(models.Model):
+    voucher             = models.OneToOneField(Voucher, on_delete=models.CASCADE, blank=True, null=True)
     title               = models.CharField(max_length=60)
     slug                = models.SlugField(blank=True)
     industry            = models.ForeignKey(Industry, on_delete=models.SET_NULL, blank=True, null=True)
@@ -52,6 +55,21 @@ class Job(models.Model):
 
     def get_absolute_url(self):
         return reverse('job', kwargs={'slug': self.slug})
+
+
+def job_pre_save_receiver(sender, instance, *args, **kwargs):
+    voucher = instance.company.voucher_set.all().first()
+    instance.voucher = voucher
+
+pre_save.connect(job_pre_save_receiver, sender=Job)
+
+
+def job_post_save_receiver(sender, created, instance, *args, **kwargs):
+    if created:
+        instance.voucher.active = False
+        instance.voucher.save()
+
+post_save.connect(job_post_save_receiver, sender=Job)
 
 
 APPLICATION_STATUS = (

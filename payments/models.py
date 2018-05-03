@@ -26,10 +26,15 @@ class PaymentProfile(models.Model):
 
     @property
     def has_voucher(self):
-        vouchers = self.user.company.voucher_set
+        vouchers = self.user.company.voucher_set.all()
         if vouchers.exists():
             return True
         return False
+
+    @property
+    def voucher_count(self):
+        vouchers = self.user.company.voucher_set.all()
+        return vouchers.count()
 
     @property
     def default_card(self):
@@ -96,11 +101,17 @@ def card_post_save_receiver(sender, instance, created, *args, **kwargs):
 post_save.connect(card_post_save_receiver, sender=Card)
 
 
+class VoucherManager(models.Manager):
+    def all(self):
+        return self.get_queryset().filter(active=True) # selects only active vouchers
+
 class Voucher(models.Model):
     voucher_id  = models.CharField(max_length=50)
     company     = models.ForeignKey(Company, on_delete=models.CASCADE, blank=True, null=True)
     active      = models.BooleanField(default=True)
     created_on  = models.DateTimeField(auto_now_add=True)
+
+    objects     = VoucherManager()
 
     def __str__(self):
         return self.voucher_id
