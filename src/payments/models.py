@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.conf import settings
 
+from .managers import CardManager, VoucherManager, ChargeManager
 from accounts.models import Company
 from jobsite.utils import random_string_generator, current_time_milli
 
@@ -58,24 +59,6 @@ def payment_profile_pre_save_receiver(sender, instance, *args, **kwargs):
 pre_save.connect(payment_profile_pre_save_receiver, sender=PaymentProfile)
 
 
-class CardManager(models.Manager):
-    def new(self, token, payment_profile):
-        if token and payment_profile.user.is_employer:
-            customer_id = payment_profile.customer_id
-            customer    = stripe.Customer.retrieve(customer_id)
-            card_rsp    = customer.sources.create(source=token)
-            new_card = self.model.objects.create(
-                payment_profile = payment_profile,
-                card_id         = card_rsp.id,
-                brand           = card_rsp.brand,
-                country         = card_rsp.country,
-                exp_month       = card_rsp.exp_month,
-                exp_year        = card_rsp.exp_year,
-                last4           = card_rsp.last4,
-            )
-            return new_card
-        return None
-
 class Card(models.Model):
     payment_profile = models.ForeignKey(PaymentProfile, on_delete=models.CASCADE)
     card_id         = models.CharField(max_length=60)
@@ -100,10 +83,6 @@ def card_post_save_receiver(sender, instance, created, *args, **kwargs):
     
 post_save.connect(card_post_save_receiver, sender=Card)
 
-
-class VoucherManager(models.Manager):
-    def all(self):
-        return self.get_queryset().filter(active=True) # selects only active vouchers
 
 class Voucher(models.Model):
     voucher_id  = models.CharField(max_length=50)
@@ -158,39 +137,6 @@ def order_post_save_receiver(sender, created, instance, *args, **kwargs):
 
 post_save.connect(order_post_save_receiver, sender=Order)
 
-
-class ChargeManager(models.Manager):
-    def take(self, payment_profile, order):
-        card = payment_profile.default_card
-        if card is None:
-            return False, 'You dont have any Card to Perform this transaction!'
-        charge = stripe.Charge.create(
-                amount= int(order.total_amount)*100,
-                currency="usd",
-                customer=payment_profile.customer_id,
-                source=card.card_id,
-                description="Voucher purchase by {0}".format(payment_profile.user.email),
-                metadata={'order_id':order.order_id}
-            )
-
-        new_charge = self.model.objects.create(
-            charge_id = charge.id,     
-            payment_profile = payment_profile,
-            order = order,
-            paid = charge.paid,        
-            refunded = charge.refunded,      
-            outcome = charge.outcome,       
-            outcome_type = charge.outcome.get('type'), 
-            seller_message = charge.outcome.get('seller_message'),
-            risk_level = charge.outcome.get('risk_level')
-        )
-
-        if new_charge.paid:
-            order.active=False 
-            order.status='paid'
-            order.save()
-
-        return new_charge.paid, new_charge.seller_message
 
 class Charge(models.Model):
     charge_id               = models.CharField(max_length=120)
