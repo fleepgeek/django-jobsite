@@ -1,0 +1,32 @@
+{% extends "companydashboard/base.html" %}
+
+{% block page_title %} {{ title }} {% endblock %}
+
+{% block dashcontent %}
+
+    <div class="columns">
+        <div class="column box">
+            {% if not request.user.paymentprofile.has_voucher and is_create %}
+                <h1 class="title is-4">You dont have Vouchers to Post a Job</h1>
+                <a href="{% url 'buy_voucher' %}" class="button is-primary">Buy Voucher</a>
+            {% else %} 
+                <h1 class="title is-4">You have {{ request.user.paymentprofile.voucher_count }} job Vouchers</h1>
+                <form action="" method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form.media }}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    {% include 'base/form.html' with btn_text='Login' %}
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <input type="submit" class="button is-primary" value="Create">
+                        </div>
+                    </div>
+                </form>
+            {% endif %}
+                
+            
+        </div>
+    </div>
+
+{% endblock dashcontent %}
+    

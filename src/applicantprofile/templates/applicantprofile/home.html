@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+    <div class="section">
+        <div class="container">
+
+            <div class="columns is-mobile is-multiline">
+                <div class="column is-2">
+                  <span class="header-icon user-profile-image">
+                    <img src="http://placehold.it/300x225" alt="avatar">
+                </div>
+                <div class="column is-4-tablet is-10-mobile name">
+                  <p>
+                    <span class="title is-bold">{{ request.user.full_name }}</span>
+                    <br />
+                    <a id="edit-preferences" class="button is-primary is-outlined mg-sm">
+                      Edit Profile</a>
+                    <br />
+                  </p>
+                  <p class="tagline">
+                      {{ request.user.applicant.about }}
+                  </p>
+                </div>
+                <div class="column is-2-tablet is-4-mobile has-text-centered">
+                  <p class="stat-val">30</p>
+                  <p class="stat-key">Applications</p>
+                </div>
+                <div class="column is-2-tablet is-4-mobile has-text-centered">
+                  <p class="stat-val">5</p>
+                  <p class="stat-key">shortlisted</p>
+                </div>
+                <div class="column is-2-tablet is-4-mobile has-text-centered">
+                  <p class="stat-val">2</p>
+                  <p class="stat-key">rejected</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="container">
+            <div class="box has-background-primary">
+                <h1 class="title has-text-white">Your Applications</h1>
+            </div>
+            <div class="columns">
+                <div class="column">
+
+                    <table class="table is-fullwidth is-hoverable">
+                        <tbody>
+                            {% for app in application_list %}
+                                <tr>
+                                    <td width="5%">{{ forloop.counter }}</td>
+                                    <td><a href="{{ app.job.get_absolute_url }}">{{ app.job }}</a></td>
+                                    <td><a class="button is-small is-info" href="#">{{ app.status }}</a></td>
+                                </tr>
+                            {% empty %}
+                                <h1 class="title">You have no Applications Yet!</h1>
+                            {% endfor %}
+                        
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+    

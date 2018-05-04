@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>{% load static %}
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to Jobsite</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.0/css/bulma.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/stripe_custom.css' %}">
+    
+  </head>
+  <body>
+
+  {% include 'base/navbar.html' %}
+
+  
+    {% if messages %}
+      <div class="container mg-top"></div>
+        {% for message in messages %}
+          <div{% if message.tags %} class="notification {{ message.tags }}"{% endif %}>
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}  
+  
+      
+  {% block content %}
+      
+  {% endblock content %}
+          
+
+  {% include 'base/js.html' %}
+  </body>
+</html>

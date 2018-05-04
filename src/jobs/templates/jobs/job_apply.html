@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<section>
+    <div class="container pd-center mg-top">
+        <div class="columns">
+            <div class="column is-half is-offset-one-quarter card">
+                <h1 class="title is-4">Apply for Job: {{ job.title }}</h1>
+                <p class="subtitle">@ {{ job.company.name }}</p>
+                <form action="" method="post" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+                    
+                    {% include 'base/form.html' with btn_text='Login' %}
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <input type="submit" class="button is-primary" value="Apply">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+    

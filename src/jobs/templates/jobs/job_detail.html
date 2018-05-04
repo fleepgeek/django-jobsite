@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column">
+                    <p class="title">{{ job.title }}</p>
+                    <p class="subtitle">{{ job.company.name }}</p>
+                    <form action="{% url 'job_apply' %}" method="get">
+                        <input type="hidden" name="job_id" value="{{ job.pk }}">
+                        <input type="submit" class="button is-primary is-large" value="Apply for Job" >
+                    </form>
+                </div>
+                
+            </div>
+            <div class="columns">
+                <div class="column is-8">
+                        <div class="content">
+                            <div class="content">
+                                <p>
+                                    {% autoescape off %}
+                                    {{ job.description }}
+                                    {% endautoescape %}
+                                </p>
+                            </div>
+                        </div>
+                </div>
+                <div class="column">
+                <article class="notification">
+                        <div class="content">
+                            <p class="title">Summary</p>
+                            <div class="content">
+                                <p class="title is-5">Company</p>
+                                <p class="subtitle is-6">{{ job.company.name }}</p>
+                            </div>
+
+                            <div class="content">
+                                <p class="title is-5">Industry</p>
+                                <p class="subtitle is-6">{{ job.industry.name }}</p>
+                            </div>
+                            <div class="content">
+                                <p class="title is-5">Job Type</p>
+                                <p class="subtitle is-6">{{ job.job_type }}</p>
+                            </div>
+                            <div class="content">
+                                <p class="title is-5">Salary</p>
+                                <p class="subtitle is-6">{{ job.salary }}</p>
+                            </div>
+                            <div class="content">
+                                <p class="title is-5">Minimum Qualification</p>
+                                <p class="subtitle is-6">{{ job.min_qualification }}</p>
+                            </div>
+                            <div class="content">
+                                <p class="title is-5">Years of Experience</p>
+                                <p class="subtitle is-6">{{ job.years_of_exp }}</p>
+                            </div>
+                            
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock content %}
+    
