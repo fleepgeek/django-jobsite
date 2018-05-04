@@ -8,6 +8,7 @@ This is a job recruitment site powered by django. The entire project was created
 * User Roles
 * Ajax Forms
 * Custom Querysets
+* Bulma Framework for Design
 
 ## Installation
 
@@ -39,5 +40,5 @@ python manage.py migrate
 ```
 You're good to go :sparkles:
 
-#### Shameless Plug :see_no_evil:
+## Shameless Plug Here :see_no_evil:
 If you read this guide up to this point, you should definately checkout my [YouTube Channel](https://www.youtube.com/channel/UCXX74aetH0OPVYNxxcVpTJw) for Django related tutorials. 
