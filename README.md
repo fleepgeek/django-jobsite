@@ -29,6 +29,7 @@ Create a  ``.env`` file and include your stripe details (You must have a stripe 
 STRIPE_PUB_KEY=your_public_key
 STRIPE_SECRET_KEY=your_secret_key
 ```
+Also, update the ``stripe_custom.js`` file with your stripe key like so:``var stripe = Stripe('your_pk')``
 
 Create a new virtual environment:
 ```bash
