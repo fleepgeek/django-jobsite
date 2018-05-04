@@ -32,6 +32,11 @@ Next, install required packages stored in the ``Pipfile.lock`` file using the ``
 ```bash
 pipenv sync
 ```
+Create a  ``.env`` file and include your stripe details (You must have a stripe account):
+```
+STRIPE_PUB_KEY=your_public_key
+STRIPE_SECRET_KEY=your_secret_key
+```
 
 Then you run your migrations:
 ```bash
