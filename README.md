@@ -7,6 +7,7 @@ This is a job recruitment site powered by django. The entire project was created
 * Stripe Integration
 * User Roles
 * Ajax Forms
+* Custom Querysets
 
 ## Installation
 
