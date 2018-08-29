@@ -1,4 +1,9 @@
 from django.db import models
+from django.conf import settings
+
+import stripe
+STRIPE_SECRET_KEY = getattr(settings, 'STRIPE_SECRET_KEY')
+stripe.api_key = STRIPE_SECRET_KEY
 
 class CardManager(models.Manager):
     def new(self, token, payment_profile):

@@ -10,10 +10,6 @@ from jobsite.utils import random_string_generator, current_time_milli
 
 User = settings.AUTH_USER_MODEL
 
-import stripe
-STRIPE_SECRET_KEY = getattr(settings, 'STRIPE_SECRET_KEY')
-stripe.api_key = STRIPE_SECRET_KEY
-
 
 class PaymentProfile(models.Model):
     user        = models.OneToOneField(User, on_delete=models.CASCADE)
